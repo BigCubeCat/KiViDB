@@ -11,6 +11,6 @@
 > /cluster
 
 ## Request
-### /core: GET, POST, DELETE
-### /filter: GET, DELETE
-### /cluster: GET
+### **/core**: GET, POST, DELETE
+### **/filter**: GET, DELETE
+### **/cluster**: GET
