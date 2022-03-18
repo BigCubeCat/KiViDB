@@ -10,13 +10,13 @@ import (
 
 type PostJSON struct {
 	Cluster string
-	ID      string
-	Data    string
+	Id      string
+	Value   string
 }
 
 type GetAndDeleteJSON struct {
 	Cluster string
-	ID      string
+	Id      string
 }
 
 func CoreHandler(w http.ResponseWriter, r *http.Request) {
@@ -34,7 +34,7 @@ func CoreHandler(w http.ResponseWriter, r *http.Request) {
 			log.Panicf("Decoding error: %v\n", err)
 		}
 		// Getting value with API
-		value, err = core.DBCore.Get(data.Cluster, data.ID)
+		value, err = core.DBCore.Get(data.Cluster, data.Id)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Panicf("API error: %v\n", err)
@@ -55,16 +55,16 @@ func CoreHandler(w http.ResponseWriter, r *http.Request) {
 			log.Panicf("Decoding error: %v\n", err)
 		}
 		// Using API
-		if data.ID == "" {
+		if data.Id == "" {
 			var id string
-			id, err = core.DBCore.Add(data.Cluster, []byte(data.Data))
+			id, err = core.DBCore.Add(data.Cluster, []byte(data.Value))
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				log.Panicf("API error: %v\n", err)
 			}
 			fmt.Println(id)
 		} else {
-			err = core.DBCore.Set(data.Cluster, data.ID, []byte(data.Data))
+			err = core.DBCore.Set(data.Cluster, data.Id, []byte(data.Value))
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				log.Panicf("API error: %v\n", err)
@@ -80,7 +80,7 @@ func CoreHandler(w http.ResponseWriter, r *http.Request) {
 			log.Panicf("Decoding error: %v\n", err)
 		}
 		// Deleting key and value
-		err = core.DBCore.Delete(data.Cluster, data.ID)
+		err = core.DBCore.Delete(data.Cluster, data.Id)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Panicf("API error: %v\n", err)

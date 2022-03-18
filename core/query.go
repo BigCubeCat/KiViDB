@@ -7,18 +7,30 @@ import (
 )
 
 func (core *Core) GetAll(cluster string) ([]string, error) {
-	var err error
+	var (
+		err      error
+		values   []Object
+		output   []string
+		jsonByte []byte
+	)
 	if err = core.ClusterExists(cluster); err != nil {
 		return []string{}, err
 	}
-	return core.ClusterDocuments(cluster)
+	values, err = core.ClusterValues(cluster)
+	for _, doc := range values {
+		jsonByte, err = json.Marshal(doc)
+		if err != nil {
+			log.Panicf("Invalid document: %v", err)
+		}
+		output = append(output, string(jsonByte))
+	}
+	return output, nil
 }
 
 func (core *Core) Filter(cluster string, query string) ([]string, error) {
 	var (
 		err      error
 		result   []Object
-		row      Object
 		jsonByte []byte
 	)
 	if err = core.ClusterExists(cluster); err != nil {
@@ -33,7 +45,7 @@ func (core *Core) Filter(cluster string, query string) ([]string, error) {
 	}
 	for _, value := range result {
 		if matched, _ := regexp.MatchString(query, value.Value); matched {
-			jsonByte, err = json.Marshal(row)
+			jsonByte, err = json.Marshal(value)
 			if err != nil {
 				log.Println(err)
 			}
