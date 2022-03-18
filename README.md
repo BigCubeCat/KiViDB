@@ -4,4 +4,11 @@
 > 1. **Put** files from archive to some folder.
 > 2. **Create** folder for database, then in **.env** write its name `DIR_NAME=DB`
 > 3. **Create** cluster (new folder) in database folder.
-> 4. **Run** server .exe file.
+
+## Routes
+> /core
+> /filter
+> /cluster
+
+## Request
+### /core
