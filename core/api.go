@@ -34,13 +34,13 @@ func (core *Core) Set(cluster string, id string, data []byte) error {
 	return err
 }
 
-func (core *Core) Add(cluster string, data []byte) error {
+func (core *Core) Add(cluster string, data []byte) (string, error) {
 	var err error
 	if err = core.ClusterExists(cluster); err != nil {
-		return err
+		return "", err
 	}
 	id := GenerateID()
 	file := path.Join(core.DirName, cluster, id)
 	err = os.WriteFile(file, data, 0644)
-	return err
+	return id, err
 }
