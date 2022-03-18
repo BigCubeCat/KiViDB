@@ -2,6 +2,7 @@ package core
 
 import (
 	"errors"
+	"fmt"
 	"github.com/google/uuid"
 	"io/ioutil"
 	"os"
@@ -11,9 +12,6 @@ func FolderExists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
 		return true, nil
-	}
-	if os.IsNotExist(err) {
-		return false, nil
 	}
 	return false, err
 }
@@ -27,6 +25,7 @@ func GetTables(path string) ([]string, error) {
 
 	for _, f := range files {
 		names = append(names, f.Name())
+		fmt.Println(f.Name())
 	}
 	return names, nil
 }

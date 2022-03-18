@@ -15,9 +15,13 @@ func Init(dirName string) error {
 		if er != nil {
 			return er
 		}
-		DBCore = &Core{DirName: dirName, Clusters: tables}
-	} else {
-		return err
+		clustersNames := make(map[string]bool)
+		for _, clusterName := range tables {
+			clustersNames[clusterName] = true
+		}
+		DBCore = &Core{
+			DirName: dirName, Clusters: tables, clusterNames: clustersNames,
+		}
 	}
-	return nil
+	return err
 }

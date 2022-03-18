@@ -23,3 +23,24 @@ func (core *Core) Get(cluster string, id string) ([]byte, error) {
 	}
 	return data, nil
 }
+
+func (core *Core) Set(cluster string, id string, data []byte) error {
+	var err error
+	if err = core.ClusterExists(cluster); err != nil {
+		return err
+	}
+	file := path.Join(core.DirName, cluster, id)
+	err = os.WriteFile(file, data, 0644)
+	return err
+}
+
+func (core *Core) Add(cluster string, data []byte) error {
+	var err error
+	if err = core.ClusterExists(cluster); err != nil {
+		return err
+	}
+	id := GenerateID()
+	file := path.Join(core.DirName, cluster, id)
+	err = os.WriteFile(file, data, 0644)
+	return err
+}
