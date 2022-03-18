@@ -7,11 +7,18 @@ import (
 	"potatoDB/core"
 )
 
+type FilterJSON struct {
+	Cluster string
+	Regex   string
+}
+
 func FilterHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		var data GetAndDeleteJSON
-		var value []byte
+		var (
+			data   FilterJSON
+			values []string
+		)
 
 		// Decoding get request data
 		err := json.NewDecoder(r.Body).Decode(&data)
@@ -20,7 +27,7 @@ func FilterHandler(w http.ResponseWriter, r *http.Request) {
 			log.Panicf("Decoding error: %v\n", err)
 		}
 		// Getting value with API
-		value, err = core.DBCore.Get(data.Cluster, data.ID)
+		values, err = core.DBCore.Filter(data.Cluster, data.Regex)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Panicf("API error: %v\n", err)
@@ -28,7 +35,7 @@ func FilterHandler(w http.ResponseWriter, r *http.Request) {
 		// Sending value back
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
-		err = json.NewEncoder(w).Encode(string(value))
+		err = json.NewEncoder(w).Encode(values)
 		if err != nil {
 			log.Panicf("Encoding error: %v\n", err)
 		}
