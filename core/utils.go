@@ -1,6 +1,7 @@
 package core
 
 import (
+	"errors"
 	"github.com/google/uuid"
 	"io/ioutil"
 	"os"
@@ -33,4 +34,19 @@ func GetTables(path string) ([]string, error) {
 func GenerateID() string {
 	id := uuid.New()
 	return id.String()
+}
+
+func (core *Core) ClusterExists(cluster string) error {
+	_, ok := core.clusterNames[cluster]
+	if !ok {
+		return errors.New("cluster doesnt exists")
+	}
+	return nil
+}
+
+func (core *Core) IdExists(id string) error {
+	if _, err := os.Stat(id); errors.Is(err, os.ErrNotExist) {
+		return err
+	}
+	return nil
 }

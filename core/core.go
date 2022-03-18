@@ -3,8 +3,9 @@ package core
 var DBCore *Core
 
 type Core struct {
-	DirName  string
-	Clusters []string
+	DirName      string
+	Clusters     []string
+	clusterNames map[string]bool
 }
 
 func Init(dirName string) error {
