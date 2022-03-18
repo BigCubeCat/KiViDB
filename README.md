@@ -2,7 +2,7 @@
 **PotatoDB** is nosql html database is written in Golang.
 ## Installation
 >1. **Put** files from archive to some folder.
->2. **Create** folder for database, then in **.env** write its name `DIR_NAME=DB`
+>2. **Create** folder for database, then in **.env** write its name e.g. `DIR_NAME=DB`
 >3. **Create** cluster (new folder) in database folder.
 
 ## Routes
