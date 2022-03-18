@@ -6,8 +6,8 @@
 >3. **Create** cluster (new folder) in database folder.
 
 ## Routes
-> /core
-> /filter
+> /core<br>
+> /filter<br>
 > /cluster
 
 ## Request
