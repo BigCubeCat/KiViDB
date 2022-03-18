@@ -12,11 +12,11 @@
 
 ## Request
 ### **/core**:
-> GET: `{
->   "Cluster": "cluster_name",
->   "Id": "object_id"
->  }`<br>
+> GET: `{"Cluster": "cluster_name", "Id": "object_id"}`<br>
 > POST: `{"Cluster": "cluster_name", "Id": "optional_id", "Value": "object_value"}`<br>
 > DELETE: `{"Cluster": "cluster_name", "Id": "object_id"}`
-### **/filter**: GET, DELETE
-### **/cluster**: GET
+### **/filter**:
+> GET: `{"Cluster": "cluster_name", "Regex": "Regular_expression"}`<br>
+> DELETE: `{"Cluster": "cluster_name", "Regex": "Regular_expression"}`
+### **/cluster**:
+> GET: `{"Cluster": "cluster_name"}
