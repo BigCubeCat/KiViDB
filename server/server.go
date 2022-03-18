@@ -77,7 +77,7 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			log.Panicf("Decoding error: %v\n", err)
 		}
-		// Getting value with API
+		// Deleting key and value
 		err = core.DBCore.Delete(data.Cluster, data.ID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
