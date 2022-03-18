@@ -18,7 +18,11 @@ func main() {
 	address := os.Getenv("ADDRESS")
 	logFileName := os.Getenv("LOG_FILE")
 	if startError := core.Init(dirName); startError != nil {
-		log.Fatal("Error: directory doesnt exists")
+		dirName = "DEFAULT"
+		_ = os.MkdirAll(dirName, os.ModePerm)
+		if startError = core.Init(dirName); startError != nil {
+			log.Fatal("Error: directory doesnt exists")
+		}
 	}
 	path := logFileName
 	_ = os.Remove(path)
@@ -33,7 +37,6 @@ func main() {
 		}
 	}(f)
 	log.SetOutput(f)
-	log.Println("This is a test log entry")
 	http.HandleFunc("/core", server.CoreHandler)
 	http.HandleFunc("/filter", server.FilterHandler)
 	http.HandleFunc("/cluster", server.ClusterHandler)
