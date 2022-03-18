@@ -19,4 +19,4 @@
 > GET: `{"Cluster": "cluster_name", "Regex": "Regular_expression"}`<br>
 > DELETE: `{"Cluster": "cluster_name", "Regex": "Regular_expression"}`
 ### **/cluster**:
-> GET: `{"Cluster": "cluster_name"}
+> GET: `{"Cluster": "cluster_name"}`
