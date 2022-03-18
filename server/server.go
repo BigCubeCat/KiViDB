@@ -14,7 +14,7 @@ type PostJSON struct {
 	Data    string
 }
 
-type GetJSON struct {
+type GetAndDeleteJSON struct {
 	Cluster string
 	ID      string
 }
@@ -22,7 +22,7 @@ type GetJSON struct {
 func HttpHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		var data GetJSON
+		var data GetAndDeleteJSON
 		var value []byte
 
 		// Decoding get request data
@@ -69,7 +69,20 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	case "DELETE":
-		fmt.Println(1)
+		var data GetAndDeleteJSON
+
+		// Decoding get request data
+		err := json.NewDecoder(r.Body).Decode(&data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			log.Panicf("Decoding error: %v\n", err)
+		}
+		// Getting value with API
+		err = core.DBCore.Delete(data.Cluster, data.ID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Panicf("API error: %v\n", err)
+		}
 	default:
 		log.Panicf("Wrong method: %v\n", r.Method)
 	}
