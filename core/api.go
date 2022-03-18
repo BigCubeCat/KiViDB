@@ -44,3 +44,13 @@ func (core *Core) Add(cluster string, data []byte) (string, error) {
 	err = os.WriteFile(file, data, 0644)
 	return id, err
 }
+
+func (core *Core) Delete(cluster string, id string) error {
+	var err error
+	if err = core.ClusterExists(cluster); err != nil {
+		return err
+	}
+	file := path.Join(core.DirName, cluster, id)
+	err = os.Remove(file)
+	return err
+}
