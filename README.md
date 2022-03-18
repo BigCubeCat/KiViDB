@@ -2,7 +2,10 @@
 **PotatoDB** is nosql html database is written in Golang.
 ## Installation
 >1. **Put** files from archive to some folder.
->2. **Create** folder for database, then in **.env** write its name e.g. ```env DIR_NAME=DB```
+>2. **Create** folder for database, then in **.env** write its name e.g. 
+>```env
+>DIR_NAME=DB
+>```
 >3. **Create** cluster (new folder) in database folder.
 
 ## Routes
@@ -13,46 +16,46 @@
 ## Request
 ### **/core**:
 > GET:
-```json
-{
- "Cluster": "cluster_name",
-  "Id": "object_id",
-}
-```
+>```json
+>{
+> "Cluster": "cluster_name",
+>  "Id": "object_id",
+>}
+>```
 > POST:
-```json
-{
- "Cluster": "cluster_name",
-  "Id": "optional_id",
-  "Value": "object_value"
-}
-```
+>```json
+>{
+> "Cluster": "cluster_name",
+>  "Id": "optional_id",
+>  "Value": "object_value"
+>}
+>```
 > DELETE:
-```json
-{
-  "Cluster": "cluster_name",
-  "Id": "object_id"
-}
-```
+>```json
+>{
+>  "Cluster": "cluster_name",
+>  "Id": "object_id"
+>}
+>```
 ### **/filter**:
 > GET:
-```json
-{
-  "Cluster": "cluster_name",
-  "Regex": "Regular_expression"
-}
-```
+>```json
+>{
+>  "Cluster": "cluster_name",
+>  "Regex": "Regular_expression"
+>}
+>```
 > DELETE:
-```json
-{
-  "Cluster": "cluster_name",
-  "Regex": "Regular_expression"
-}
-```
+>```json
+>{
+>  "Cluster": "cluster_name",
+>  "Regex": "Regular_expression"
+>}
+>```
 ### **/cluster**:
 > GET:
-```json
-{
-  "Cluster": "cluster_name"
-}
-```
+>```json
+>{
+>  "Cluster": "cluster_name"
+>}
+>```
