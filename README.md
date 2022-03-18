@@ -42,14 +42,14 @@
 >```json
 >{
 >  "Cluster": "cluster_name",
->  "Regex": "Regular_expression"
+>  "Regex": "regular_expression"
 >}
 >```
 > DELETE:
 >```json
 >{
 >  "Cluster": "cluster_name",
->  "Regex": "Regular_expression"
+>  "Regex": "regular_expression"
 >}
 >```
 ### **/cluster**:
