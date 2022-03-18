@@ -56,6 +56,7 @@ func FilterHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Panicf("API error: %v\n", err)
 		}
+		w.WriteHeader(http.StatusOK)
 	default:
 		log.Panicf("Wrong method: %v\n", r.Method)
 	}

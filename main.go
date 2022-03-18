@@ -40,8 +40,5 @@ func main() {
 	http.HandleFunc("/core", server.CoreHandler)
 	http.HandleFunc("/filter", server.FilterHandler)
 	http.HandleFunc("/cluster", server.ClusterHandler)
-	err = http.ListenAndServe(":"+address, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+	log.Fatal(http.ListenAndServe(":"+address, nil))
 }

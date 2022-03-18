@@ -12,30 +12,41 @@ type ClusterJSON struct {
 }
 
 func ClusterHandler(w http.ResponseWriter, r *http.Request) {
+	var data ClusterJSON
+	// Decoding get request data
+	err := json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		log.Panicf("Decoding error: %v\n", err)
+	}
 	switch r.Method {
 	case "GET":
-		var data ClusterJSON
 		var values []string
-
-		// Decoding get request data
-		err := json.NewDecoder(r.Body).Decode(&data)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			log.Panicf("Decoding error: %v\n", err)
-		}
-		// Getting values with API
 		values, err = core.DBCore.GetAll(data.Cluster)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			log.Panicf("API error: %v\n", err)
 		}
-		// Sending values back
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		err = json.NewEncoder(w).Encode(values)
 		if err != nil {
 			log.Panicf("Encoding error: %v\n", err)
 		}
+	case "DELETE":
+		if err = core.DBCore.DropCluster(data.Cluster); err != nil {
+			http.Error(w, "API error: "+err.Error(), http.StatusBadRequest)
+			log.Panicf("API error: %v\n", err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+	case "POST":
+		if err = core.DBCore.CreateCluster(data.Cluster); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			log.Panicf("API error: %v\n", err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
 	default:
 		log.Panicf("Wrong method: %v\n", r.Method)
 	}
