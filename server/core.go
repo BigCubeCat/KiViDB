@@ -22,8 +22,10 @@ type GetAndDeleteJSON struct {
 func CoreHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		var data GetAndDeleteJSON
-		var value []byte
+		var (
+			data  GetAndDeleteJSON
+			value []byte
+		)
 
 		// Decoding get request data
 		err := json.NewDecoder(r.Body).Decode(&data)

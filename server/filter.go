@@ -32,7 +32,7 @@ func FilterHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Panicf("API error: %v\n", err)
 		}
-		// Sending value back
+		// Sending values back
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		err = json.NewEncoder(w).Encode(values)
