@@ -12,8 +12,8 @@
 
 ## Request
 ### **/core**:
-#### GET
-#### POST
-#### DELETE
+#### GET: `{"Cluster": "cluster_name", "Id": "object_id"}`
+#### POST: `{"Cluster": "cluster_name", "Id": "optional_id", "Value": "object_value"}`
+#### DELETE: `{"Cluster": "cluster_name", "Id": "object_id"}`
 ### **/filter**: GET, DELETE
 ### **/cluster**: GET
