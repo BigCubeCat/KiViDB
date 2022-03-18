@@ -13,7 +13,7 @@ import (
 type PostJSON struct {
 	Cluster string
 	ID      string
-	Data    []byte
+	Data    string
 }
 
 type GetJSON struct {
@@ -59,7 +59,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		// Sending value back
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
-		err = json.NewEncoder(w).Encode(value)
+		err = json.NewEncoder(w).Encode(string(value))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -69,12 +69,21 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		err := json.NewDecoder(r.Body).Decode(&data)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
-			log.Fatal(err)
+			fmt.Println(err)
 		}
 		// Using API
-		err = core.DBCore.Set(data.Cluster, data.ID, data.Data)
-		if err != nil {
-			log.Fatalf("API error: %s", err)
+		if data.ID == "" {
+			var id string
+			id, err = core.DBCore.Add(data.Cluster, []byte(data.Data))
+			if err != nil {
+				log.Fatalf("API error: %s", err)
+			}
+			fmt.Printf("New ID: %s\n", id)
+		} else {
+			err = core.DBCore.Set(data.Cluster, data.ID, []byte(data.Data))
+			if err != nil {
+				log.Fatalf("API error: %s", err)
+			}
 		}
 	case "DELETE":
 		fmt.Println(r.Method)

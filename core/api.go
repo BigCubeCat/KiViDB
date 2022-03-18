@@ -17,7 +17,7 @@ func (core *Core) Get(cluster string, id string) ([]byte, error) {
 	if err = core.IdExists(file); err != nil {
 		return data, err
 	}
-	data, err = os.ReadFile(id)
+	data, err = os.ReadFile(file)
 	if err != nil {
 		return data, err
 	}
