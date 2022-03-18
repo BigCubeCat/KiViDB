@@ -2,10 +2,10 @@ package core
 
 import (
 	"errors"
-	"fmt"
 	"github.com/google/uuid"
 	"io/ioutil"
 	"os"
+	"path"
 )
 
 func FolderExists(path string) (bool, error) {
@@ -25,7 +25,6 @@ func GetTables(path string) ([]string, error) {
 
 	for _, f := range files {
 		names = append(names, f.Name())
-		fmt.Println(f.Name())
 	}
 	return names, nil
 }
@@ -48,4 +47,22 @@ func (core *Core) IdExists(id string) error {
 		return err
 	}
 	return nil
+}
+
+func (core *Core) ClusterDocuments(cluster string) ([]string, error) {
+	var (
+		result []string
+		err    error
+	)
+	if err = core.ClusterExists(cluster); err != nil {
+		return result, err
+	}
+	file, e := ioutil.ReadDir(path.Join(core.DirName, cluster))
+	if e != nil {
+		return result, e
+	}
+	for _, f := range file {
+		result = append(result, f.Name())
+	}
+	return result, nil
 }

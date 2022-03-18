@@ -8,6 +8,7 @@ type Core struct {
 	clusterNames map[string]bool
 }
 
+// Init create Core struct object in core package
 func Init(dirName string) error {
 	value, err := FolderExists(dirName)
 	if value {
