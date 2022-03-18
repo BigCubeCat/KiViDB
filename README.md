@@ -14,4 +14,4 @@
 ### /core
 > GET
 > **Example**
-> `{ "Cluster": "users", "Id": "some id"}`
+>> `{ "Cluster": "users", "Id": "some id"}`
