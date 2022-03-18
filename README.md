@@ -12,11 +12,47 @@
 
 ## Request
 ### **/core**:
-> GET: `{"Cluster": "cluster_name", "Id": "object_id"}`<br>
-> POST: `{"Cluster": "cluster_name", "Id": "optional_id", "Value": "object_value"}`<br>
-> DELETE: `{"Cluster": "cluster_name", "Id": "object_id"}`
+> GET:
+```json
+{
+ "Cluster": "cluster_name",
+  "Id": "object_id",
+}
+```
+> POST:
+```json
+{
+ "Cluster": "cluster_name",
+  "Id": "optional_id",
+  "Value": "object_value"
+}
+```
+> DELETE:
+```json
+{
+  "Cluster": "cluster_name",
+  "Id": "object_id"
+}
+```
 ### **/filter**:
-> GET: `{"Cluster": "cluster_name", "Regex": "Regular_expression"}`<br>
-> DELETE: `{"Cluster": "cluster_name", "Regex": "Regular_expression"}`
+> GET:
+```json
+{
+  "Cluster": "cluster_name",
+  "Regex": "Regular_expression"
+}
+```
+> DELETE:
+```json
+{
+  "Cluster": "cluster_name",
+  "Regex": "Regular_expression"
+}
+```
 ### **/cluster**:
-> GET: `{"Cluster": "cluster_name"}`
+> GET:
+```json
+{
+  "Cluster": "cluster_name"
+}
+```
