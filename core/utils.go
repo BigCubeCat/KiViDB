@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/google/uuid"
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 )
@@ -65,4 +66,31 @@ func (core *Core) ClusterDocuments(cluster string) ([]string, error) {
 		result = append(result, f.Name())
 	}
 	return result, nil
+}
+
+func (core *Core) ClusterValues(cluster string) ([]string, error) {
+	var (
+		result []string
+		err    error
+	)
+	if err = core.ClusterExists(cluster); err != nil {
+		return result, err
+	}
+	file, e := ioutil.ReadDir(path.Join(core.DirName, cluster))
+	if e != nil {
+		return result, e
+	}
+	var dat []byte
+	for _, f := range file {
+		dat, err = core.DocumentData(cluster, f.Name())
+		if err != nil {
+			log.Panicf("Error in get cluster values: %v", err)
+		}
+		result = append(result, string(dat))
+	}
+	return result, nil
+}
+
+func (core *Core) DocumentData(cluster string, id string) ([]byte, error) {
+	return os.ReadFile(path.Join(core.DirName, cluster, id))
 }
