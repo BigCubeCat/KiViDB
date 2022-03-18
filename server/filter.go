@@ -40,16 +40,18 @@ func FilterHandler(w http.ResponseWriter, r *http.Request) {
 			log.Panicf("Encoding error: %v\n", err)
 		}
 	case "DELETE":
-		var data GetAndDeleteJSON
-
+		var (
+			unmarshalledJSON FilterJSON
+			err              error
+		)
 		// Decoding get request data
-		err := json.NewDecoder(r.Body).Decode(&data)
+		err = json.NewDecoder(r.Body).Decode(&unmarshalledJSON)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			log.Panicf("Decoding error: %v\n", err)
 		}
 		// Deleting key and value
-		err = core.DBCore.Delete(data.Cluster, data.ID)
+		err = core.DBCore.DeleteByRegex(unmarshalledJSON.Cluster, unmarshalledJSON.Regex)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Panicf("API error: %v\n", err)
