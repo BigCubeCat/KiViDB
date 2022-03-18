@@ -5,6 +5,7 @@ import (
 	"path"
 )
 
+// Get return document data by id from cluster
 func (core *Core) Get(cluster string, id string) ([]byte, error) {
 	var (
 		data []byte
@@ -24,6 +25,8 @@ func (core *Core) Get(cluster string, id string) ([]byte, error) {
 	return data, nil
 }
 
+// Set change value by id in cluster on data
+// if document with id doesn't exist, create document
 func (core *Core) Set(cluster string, id string, data []byte) error {
 	var err error
 	if err = core.ClusterExists(cluster); err != nil {
@@ -34,6 +37,7 @@ func (core *Core) Set(cluster string, id string, data []byte) error {
 	return err
 }
 
+// Add create document with auto-gen id and save data to cluster
 func (core *Core) Add(cluster string, data []byte) (string, error) {
 	var err error
 	if err = core.ClusterExists(cluster); err != nil {
@@ -45,6 +49,7 @@ func (core *Core) Add(cluster string, data []byte) (string, error) {
 	return id, err
 }
 
+// Delete remove document with id in cluster
 func (core *Core) Delete(cluster string, id string) error {
 	var err error
 	if err = core.ClusterExists(cluster); err != nil {
