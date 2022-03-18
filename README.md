@@ -13,5 +13,5 @@
 ## Request
 ### /core
 > GET
-> **Example**
+>> **Example**
 >> `{ "Cluster": "users", "Id": "some id"}`
