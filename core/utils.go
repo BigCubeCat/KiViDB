@@ -9,6 +9,11 @@ import (
 	"path"
 )
 
+type Object struct {
+	Key   string
+	Value string
+}
+
 func FolderExists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -68,9 +73,9 @@ func (core *Core) ClusterDocuments(cluster string) ([]string, error) {
 	return result, nil
 }
 
-func (core *Core) ClusterValues(cluster string) ([]string, error) {
+func (core *Core) ClusterValues(cluster string) ([]Object, error) {
 	var (
-		result []string
+		result []Object
 		err    error
 	)
 	if err = core.ClusterExists(cluster); err != nil {
@@ -86,7 +91,7 @@ func (core *Core) ClusterValues(cluster string) ([]string, error) {
 		if err != nil {
 			log.Panicf("Error in get cluster values: %v", err)
 		}
-		result = append(result, string(dat))
+		result = append(result, Object{f.Name(), string(dat)})
 	}
 	return result, nil
 }

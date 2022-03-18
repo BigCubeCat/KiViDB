@@ -26,10 +26,17 @@ func main() {
 	if err != nil {
 		log.Fatalf("Unable to open log file: %v", err)
 	}
-	defer f.Close()
+	defer func(f *os.File) {
+		err := f.Close()
+		if err != nil {
+			log.Panicf("Unable to close log file: %v", err)
+		}
+	}(f)
 	log.SetOutput(f)
 	log.Println("This is a test log entry")
-	http.HandleFunc("/", server.HttpHandler)
+	http.HandleFunc("/core", server.CoreHandler)
+	http.HandleFunc("/filter", server.FilterHandler)
+	http.HandleFunc("/cluster", server.ClusterHandler)
 	err = http.ListenAndServe(":"+address, nil)
 	if err != nil {
 		log.Fatal(err)
