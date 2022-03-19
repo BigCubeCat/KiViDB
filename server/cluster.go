@@ -13,7 +13,7 @@ type ClusterJSON struct {
 
 func ClusterHandler(w http.ResponseWriter, r *http.Request) {
 	var data ClusterJSON
-	// Decoding get request data
+	// Decoding request's data
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
