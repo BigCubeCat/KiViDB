@@ -59,3 +59,15 @@
 >  "Cluster": "cluster_name"
 >}
 >```
+> POST:
+>```json
+>{
+>  "Cluster": "cluster_name"
+>}
+>```
+> DELETE:
+>```json
+>{
+>  "Cluster": "cluster_name"
+>}
+>```
