@@ -15,14 +15,14 @@
 
 ## Request
 ### **/core**:
-> GET:
+> GET: Returning object by Id.
 >```json
 >{
 > "Cluster": "cluster_name",
 >  "Id": "object_id",
 >}
 >```
-> POST:
+> POST: Creating a new cluster. 
 >```json
 >{
 > "Cluster": "cluster_name",
@@ -30,7 +30,7 @@
 >  "Value": "object_value"
 >}
 >```
-> DELETE:
+> DELETE: Deleting cluster by id.
 >```json
 >{
 >  "Cluster": "cluster_name",
@@ -38,14 +38,14 @@
 >}
 >```
 ### **/filter**:
-> GET:
+> GET: Returning all objects, satisfying the RE.
 >```json
 >{
 >  "Cluster": "cluster_name",
 >  "Regex": "regular_expression"
 >}
 >```
-> DELETE:
+> DELETE: Deleting all objects, satisfying the RE.
 >```json
 >{
 >  "Cluster": "cluster_name",
@@ -53,7 +53,19 @@
 >}
 >```
 ### **/cluster**:
-> GET:
+> GET: Returning all objects in this cluster.
+>```json
+>{
+>  "Cluster": "cluster_name"
+>}
+>```
+> POST: Creating a new cluster.
+>```json
+>{
+>  "Cluster": "cluster_name"
+>}
+>```
+> DELETE: Deleting a cluster.
 >```json
 >{
 >  "Cluster": "cluster_name"
