@@ -15,10 +15,13 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 	dirName := os.Getenv("DIR_NAME")
+	if dirName == "" {
+		dirName = "DEFAULT"
+	}
 	address := os.Getenv("ADDRESS")
+	host := os.Getenv("HOST")
 	logFileName := os.Getenv("LOG_FILE")
 	if startError := core.Init(dirName); startError != nil {
-		dirName = "DEFAULT"
 		_ = os.MkdirAll(dirName, os.ModePerm)
 		if startError = core.Init(dirName); startError != nil {
 			log.Fatal("Error: directory doesnt exists")
@@ -40,5 +43,5 @@ func main() {
 	http.HandleFunc("/core", server.CoreHandler)
 	http.HandleFunc("/filter", server.FilterHandler)
 	http.HandleFunc("/cluster", server.ClusterHandler)
-	log.Fatal(http.ListenAndServe(":"+address, nil))
+	log.Fatal(http.ListenAndServe(host+":"+address, nil))
 }
