@@ -41,7 +41,7 @@ func CoreHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		// Sending value back
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(string(value))
 		if err != nil {
 			log.Printf("Encoding error: %v\n", err)

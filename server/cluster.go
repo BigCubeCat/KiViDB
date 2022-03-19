@@ -13,7 +13,7 @@ type ClusterJSON struct {
 
 func ClusterHandler(w http.ResponseWriter, r *http.Request) {
 	var data ClusterJSON
-	// Decoding get request data
+	// Decoding request's data
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -28,7 +28,7 @@ func ClusterHandler(w http.ResponseWriter, r *http.Request) {
 			log.Printf("API error: %v\n", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(values)
 		if err != nil {
 			log.Printf("Encoding error: %v\n", err)
