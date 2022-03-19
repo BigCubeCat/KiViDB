@@ -53,19 +53,19 @@
 >}
 >```
 ### **/cluster**:
-> GET:
+> GET: Returning all objects in this cluster.
 >```json
 >{
 >  "Cluster": "cluster_name"
 >}
 >```
-> POST:
+> POST: Creating a new cluster.
 >```json
 >{
 >  "Cluster": "cluster_name"
 >}
 >```
-> DELETE:
+> DELETE: Deleting a cluster.
 >```json
 >{
 >  "Cluster": "cluster_name"
