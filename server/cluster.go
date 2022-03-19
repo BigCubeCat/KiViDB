@@ -28,7 +28,7 @@ func ClusterHandler(w http.ResponseWriter, r *http.Request) {
 			log.Panicf("API error: %v\n", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(values)
 		if err != nil {
 			log.Panicf("Encoding error: %v\n", err)
