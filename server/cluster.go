@@ -2,9 +2,11 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"kiviDB/core"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type ClusterJSON struct {
@@ -14,6 +16,8 @@ type ClusterJSON struct {
 func ClusterHandler(w http.ResponseWriter, r *http.Request) {
 	var data ClusterJSON
 	// Decoding request's data
+	id := strings.TrimPrefix(r.URL.Path, "/cluster/")
+	fmt.Printf("%q\n", strings.Split(id, "+"))
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -28,7 +32,6 @@ func ClusterHandler(w http.ResponseWriter, r *http.Request) {
 			log.Printf("API error: %v\n", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(values)
 		if err != nil {
 			log.Printf("Encoding error: %v\n", err)
@@ -39,14 +42,12 @@ func ClusterHandler(w http.ResponseWriter, r *http.Request) {
 			log.Printf("API error: %v\n", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
 	case "POST":
 		if err = core.DBCore.CreateCluster(data.Cluster); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			log.Printf("API error: %v\n", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
 	default:
 		log.Printf("Wrong method: %v\n", r.Method)
 	}

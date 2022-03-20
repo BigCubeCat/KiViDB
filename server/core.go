@@ -41,7 +41,6 @@ func CoreHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		// Sending value back
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(string(value))
 		if err != nil {
 			log.Printf("Encoding error: %v\n", err)
@@ -70,7 +69,6 @@ func CoreHandler(w http.ResponseWriter, r *http.Request) {
 				log.Printf("API error: %v\n", err)
 			}
 		}
-		w.WriteHeader(http.StatusOK)
 	case "DELETE":
 		var data GetAndDeleteJSON
 
@@ -86,7 +84,6 @@ func CoreHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Printf("API error: %v\n", err)
 		}
-		w.WriteHeader(http.StatusOK)
 	default:
 		log.Printf("Wrong method: %v\n", r.Method)
 	}

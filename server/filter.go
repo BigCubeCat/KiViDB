@@ -34,7 +34,6 @@ func FilterHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		// Sending values back
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
 		err = json.NewEncoder(w).Encode(values)
 		if err != nil {
 			log.Printf("Encoding error: %v\n", err)
@@ -56,7 +55,6 @@ func FilterHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Printf("API error: %v\n", err)
 		}
-		w.WriteHeader(http.StatusOK)
 	default:
 		log.Printf("Wrong method: %v\n", r.Method)
 	}

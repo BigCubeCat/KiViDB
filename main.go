@@ -42,6 +42,6 @@ func main() {
 	log.SetOutput(f)
 	http.HandleFunc("/core", server.CoreHandler)
 	http.HandleFunc("/filter", server.FilterHandler)
-	http.HandleFunc("/cluster", server.ClusterHandler)
+	http.HandleFunc("/cluster/", server.ClusterHandler)
 	log.Fatal(http.ListenAndServe(host+":"+address, nil))
 }
