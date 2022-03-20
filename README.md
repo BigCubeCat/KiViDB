@@ -1,4 +1,4 @@
-# [<img src="k_img.png" width="48"/>](k_img.png) KiViDB
+# [<img src="kivi.png" width="48"/>](kivi.png) KiViDB
 🥝**KiviDB** is simple key-value database written on Golang.
 ## Installation
 1. **Build** project:
