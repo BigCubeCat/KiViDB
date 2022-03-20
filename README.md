@@ -1,5 +1,5 @@
-# [<img src="k_img.png" width="48"/>](k_img.png) PotatoDB
-🥔**PotatoDB** is simple key-value database written on Golang.
+# [<img src="k_img.png" width="48"/>](k_img.png) KiViDB
+🥝**KiviDB** is simple key-value database written on Golang.
 ## Installation
 1. **Build** project:
 ```sh
@@ -9,10 +9,10 @@ go build .
 ```env
 DIR_NAME=YOUR_DB_NAME
 ADDRESS=8080
-LOG_FILE=potato.log
+LOG_FILE=kividb.log
 HOST=localhost
 ```
-3. Run ```./potatoDB```
+3. Run ```./kiviDB```
 4. Setup and work with database by http API.
 
 ## Routes
