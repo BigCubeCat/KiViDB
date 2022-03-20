@@ -68,8 +68,8 @@ HOST=localhost
 >```
 > http://localhost:8080/cluster/cluster_name
 >```
-OLD FEATURES
-### **/filter** (for get many documents in cluster):
+Out dated
+~~### **/filter** (for get many documents in cluster):
 #### Get all documents, which value contain to regex:
 > GET:
 >```json
@@ -85,4 +85,4 @@ OLD FEATURES
 >  "Cluster": "cluster_name",
 >  "Regex": "regular_expression"
 >}
->```
+>```~~
