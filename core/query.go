@@ -6,25 +6,11 @@ import (
 	"regexp"
 )
 
-func (core *Core) GetAll(cluster string) ([]string, error) {
-	var (
-		err      error
-		values   []Object
-		output   []string
-		jsonByte []byte
-	)
-	if err = core.ClusterExists(cluster); err != nil {
-		return []string{}, err
+func (core *Core) GetAll(cluster string) ([]Object, error) {
+	if err := core.ClusterExists(cluster); err != nil {
+		return []Object{}, err
 	}
-	values, err = core.ClusterValues(cluster)
-	for _, doc := range values {
-		jsonByte, err = json.Marshal(doc)
-		if err != nil {
-			log.Panicf("Invalid document: %v", err)
-		}
-		output = append(output, string(jsonByte))
-	}
-	return output, nil
+	return core.ClusterValues(cluster)
 }
 
 func (core *Core) Filter(cluster string, query string) ([]string, error) {

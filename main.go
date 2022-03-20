@@ -1,11 +1,12 @@
 package main
 
 import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
+	"kiviDB/api"
 	"kiviDB/core"
-	"kiviDB/server"
 	"log"
-	"net/http"
 	"os"
 )
 
@@ -40,8 +41,20 @@ func main() {
 		}
 	}(f)
 	log.SetOutput(f)
-	http.HandleFunc("/core", server.CoreHandler)
-	http.HandleFunc("/filter", server.FilterHandler)
-	http.HandleFunc("/cluster/", server.ClusterHandler)
-	log.Fatal(http.ListenAndServe(host+":"+address, nil))
+	app := fiber.New(fiber.Config{})
+	app.Use(cors.New(cors.Config{
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
+
+	app.Post("/cluster/:id", api.PostClusterHandler)
+	app.Delete("/cluster/:id", api.DeleteClusterHandler)
+	app.Get("/cluster/:id", api.GetClusterHandler)
+
+	app.Get("/doc/:cluster/:id", api.GetDocumentHandler)
+	app.Post("/doc/:cluster/:id", api.PostDocumentHandler)
+	app.Post("/doc/:cluster", api.CreateDocumentHandler)
+	app.Delete("/doc/:cluster/:id", api.DeleteDocumentHandler)
+
+	log.Fatal(app.Listen(host + ":" + address))
+
 }
