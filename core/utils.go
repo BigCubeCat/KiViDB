@@ -41,8 +41,7 @@ func GenerateID() string {
 }
 
 func (core *Core) ClusterExists(cluster string) error {
-	_, ok := core.clusterNames[cluster]
-	if !ok {
+	if _, err := os.Stat(path.Join(core.DirName, cluster)); os.IsNotExist(err) {
 		return errors.New("cluster doesnt exists")
 	}
 	return nil

@@ -54,7 +54,7 @@ func DeleteClusterHandler(context *fiber.Ctx) error {
 		})
 		return err
 	}
-	_ = core.DBCore.CreateCluster(id) // Ignore error bcs already handle cluster exists
+	_ = core.DBCore.DropCluster(id) // Ignore error coz already handle cluster exists
 	context.Status(http.StatusOK).JSON(&fiber.Map{
 		"message": "OK",
 	})

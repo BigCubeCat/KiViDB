@@ -20,7 +20,6 @@ func (core *Core) CreateCluster(cluster string) error {
 		return errors.New("cluster name must contain only lowercase and numbers")
 	}
 	core.Clusters = append(core.Clusters, cluster)
-	core.clusterNames[cluster] = true
 	return os.MkdirAll(path.Join(core.DirName, cluster), os.ModePerm)
 }
 
@@ -31,7 +30,6 @@ func (core *Core) DropCluster(cluster string) error {
 	if err = core.ClusterExists(cluster); err != nil {
 		return errors.New("cluster already exists")
 	}
-	delete(core.clusterNames, cluster)
 	var remove = func(slice []string, deleteValue string) []string {
 		var newClusters []string
 		for _, clstr := range slice {

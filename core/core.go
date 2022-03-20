@@ -3,9 +3,8 @@ package core
 var DBCore *Core
 
 type Core struct {
-	DirName      string
-	Clusters     []string
-	clusterNames map[string]bool
+	DirName  string
+	Clusters []string
 }
 
 // Init create Core struct object in core package
@@ -21,7 +20,7 @@ func Init(dirName string) error {
 			clustersNames[clusterName] = true
 		}
 		DBCore = &Core{
-			DirName: dirName, Clusters: tables, clusterNames: clustersNames,
+			DirName: dirName, Clusters: tables,
 		}
 	}
 	return err
