@@ -1,4 +1,4 @@
-# [<img src="kiwi.png" width="48"/>](kiwi.png) PotatoDB
+# [<img src="k_img.png" width="48"/>](k_img.png) PotatoDB
 🥔**PotatoDB** is simple key-value database written on Golang.
 ## Installation
 1. **Build** project:
