@@ -68,21 +68,3 @@ HOST=localhost
 >```
 > http://localhost:8080/cluster/cluster_name
 >```
-Out dated
-~~### **/filter** (for get many documents in cluster):
-#### Get all documents, which value contain to regex:
-> GET:
->```json
->{
->  "Cluster": "cluster_name",
->  "Regex": "regular_expression"
->}
->```
-#### Delete all documents, which doesn't contain to regex:
-> DELETE:
->```json
->{
->  "Cluster": "cluster_name",
->  "Regex": "regular_expression"
->}
->```~~
