@@ -1,4 +1,4 @@
-module potatoDB
+module kiviDB
 
 go 1.18
 

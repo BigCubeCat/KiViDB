@@ -2,9 +2,9 @@ package server
 
 import (
 	"encoding/json"
+	"kiviDB/core"
 	"log"
 	"net/http"
-	"potatoDB/core"
 )
 
 type FilterJSON struct {

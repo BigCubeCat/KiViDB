@@ -3,9 +3,9 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"kiviDB/core"
 	"log"
 	"net/http"
-	"potatoDB/core"
 )
 
 type PostJSON struct {

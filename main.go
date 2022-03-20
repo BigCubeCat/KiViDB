@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/joho/godotenv"
+	"kiviDB/core"
+	"kiviDB/server"
 	"log"
 	"net/http"
 	"os"
-	"potatoDB/core"
-	"potatoDB/server"
 )
 
 func main() {
