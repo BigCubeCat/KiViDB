@@ -38,6 +38,7 @@ HOST=localhost
 >}
 >```
 #### Create new value in cluster with known-key:
+> POST:
 >```
 > http://localhost:8080/doc/cluster_name/id
 >```
