@@ -16,7 +16,7 @@ HOST=localhost
 4. Setup and work with database by http API.
 
 ## Routes
-> /cluster/
+> /cluster/<br>
 > /doc/
 
 ## Request
