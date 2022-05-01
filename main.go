@@ -22,27 +22,33 @@ func main() {
 	}
 	port := os.Getenv("PORT")
 	host := os.Getenv("HOST")
-	if startError := core.Init(dirName); startError != nil {
-		_ = os.MkdirAll(dirName, os.ModePerm)
-		if startError = core.Init(dirName); startError != nil {
-			log.Fatal("Error: directory doesn't exists")
-		}
-	}
-	logFileName := "logs/" + time.Now().Format("01-02-2006 15-04-05 Mon") + ".log"
-	if _, err := os.Stat("./logs"); os.IsNotExist(err) {
+
+	logFileName := "logs/" + time.Now().Format("01-02-2006 15-04-05") + ".log"
+	if _, err = os.Stat("./logs"); os.IsNotExist(err) {
 		_ = os.MkdirAll("./logs", os.ModePerm)
 	}
-	f, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	var f *os.File
+	f, err = os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("Unable to open log file: %v", err)
 	}
 	defer func(f *os.File) {
-		err := f.Close()
+		err = f.Close()
 		if err != nil {
 			log.Panicf("Unable to close log file: %v", err)
 		}
 	}(f)
 	log.SetOutput(f)
+
+	if startError := core.Init(dirName); startError != nil {
+		log.Printf("Creating database folder with name: %v\n", dirName)
+		if err = os.MkdirAll(dirName, os.ModePerm); err != nil {
+			log.Fatalf("Unable to create database folder: %v\n", err)
+		}
+		if startError = core.Init(dirName); startError != nil {
+			log.Fatalln(err)
+		}
+	}
 	app := fiber.New(fiber.Config{})
 	app.Use(cors.New(cors.Config{
 		AllowHeaders: "Origin, Content-Type, Accept",

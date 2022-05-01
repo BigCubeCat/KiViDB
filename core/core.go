@@ -13,12 +13,12 @@ type Core struct {
 func Init(dirName string) error {
 	err := FolderExists(dirName)
 	if err != nil {
-		log.Panic(err)
+		log.Printf("Unable to open database folder: %v\n", err)
 		return err
 	}
 	tables, err := GetTables(dirName)
 	if err != nil {
-		log.Panic(err)
+		log.Panicln(err)
 		return err
 	}
 	clustersNames := make(map[string]bool)

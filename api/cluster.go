@@ -13,13 +13,13 @@ func GetClusterHandler(context *fiber.Ctx) error {
 	var err error
 	id, err = ParseArg(context, "id")
 	if err != nil {
-		log.Printf("[GET Cluster] unable to get cluster id: %v\n", err)
+		log.Printf("[GET Cluster] Unable to get cluster id: %v\n", err)
 		return context.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"message": "unable to get id of the cluster",
 		})
 	}
 	if err = core.DBCore.ClusterExists(id); err != nil {
-		log.Printf("[GET Cluster] unable to get cluster: %v\n", err)
+		log.Printf("[GET Cluster] Unable to get cluster: %v\n", err)
 		return context.Status(http.StatusNotFound).JSON(&fiber.Map{
 			"message": "cluster not found",
 			"data":    []string{},
@@ -27,7 +27,7 @@ func GetClusterHandler(context *fiber.Ctx) error {
 	}
 	values, err = core.DBCore.ClusterValues(id)
 	if err != nil {
-		log.Printf("[GET Cluster] ubable to get cluster's values: %v\n", err)
+		log.Printf("[GET Cluster] Ubable to get cluster's values: %v\n", err)
 	}
 	return context.Status(http.StatusOK).JSON(&fiber.Map{
 		"message": "OK",
@@ -39,18 +39,19 @@ func PostClusterHandler(context *fiber.Ctx) error {
 	var err error
 	id, err = ParseArg(context, "id")
 	if err != nil {
-		log.Printf("[POST Cluster] unable to get cluster id: %v\n", err)
+		log.Printf("[POST Cluster] Unable to get cluster id: %v\n", err)
 		return context.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"message": "unable to get id of the cluster	",
 		})
 	}
 	err = core.DBCore.CreateCluster(id)
 	if err != nil {
-		log.Printf("ubable to create cluster: %v\n", err)
+		log.Printf("[POST Cluster] Ubable to create cluster: %v\n", err)
 		return context.Status(http.StatusOK).JSON(&fiber.Map{
 			"message": "unable to create cluster",
 		})
 	}
+	log.Printf("Cluster with id: `%v` is created", id)
 	return context.Status(http.StatusOK).JSON(&fiber.Map{
 		"message": "OK",
 	})
@@ -61,13 +62,13 @@ func DeleteClusterHandler(context *fiber.Ctx) error {
 	var err error
 	id, err = ParseArg(context, "id")
 	if err != nil {
-		log.Printf("[DELETE Cluster] %v\n", err)
+		log.Printf("[DELETE Cluster] Unable to parse cluster id: %v\n", err)
 		return context.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"message": "unable to get id of the cluster",
 		})
 	}
 	if err = core.DBCore.ClusterExists(id); err != nil {
-		log.Printf("[DELETE Cluster] %v\n", err)
+		log.Printf("[DELETE Cluster] Unable to delete cluster: %v\n", err)
 		return context.Status(http.StatusNotFound).JSON(&fiber.Map{
 			"message": "cluster not found",
 		})
@@ -75,7 +76,7 @@ func DeleteClusterHandler(context *fiber.Ctx) error {
 	}
 	err = core.DBCore.DropCluster(id)
 	if err != nil {
-		log.Printf("[DELETE Cluster] %v\n", err)
+		log.Printf("[DELETE Cluster] Unable to delete cluster: %v\n", err)
 		return context.Status(http.StatusNotFound).JSON(&fiber.Map{
 			"message": "unable to delete cluster",
 		})
