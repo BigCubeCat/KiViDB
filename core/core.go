@@ -1,5 +1,7 @@
 package core
 
+import "log"
+
 var DBCore *Core
 
 type Core struct {
@@ -9,19 +11,22 @@ type Core struct {
 
 // Init create Core struct object in core package
 func Init(dirName string) error {
-	value, err := FolderExists(dirName)
-	if value {
-		tables, er := GetTables(dirName)
-		if er != nil {
-			return er
-		}
-		clustersNames := make(map[string]bool)
-		for _, clusterName := range tables {
-			clustersNames[clusterName] = true
-		}
-		DBCore = &Core{
-			DirName: dirName, Clusters: tables,
-		}
+	err := FolderExists(dirName)
+	if err != nil {
+		log.Panic(err)
+		return err
 	}
-	return err
+	tables, err := GetTables(dirName)
+	if err != nil {
+		log.Panic(err)
+		return err
+	}
+	clustersNames := make(map[string]bool)
+	for _, clusterName := range tables {
+		clustersNames[clusterName] = true
+	}
+	DBCore = &Core{
+		DirName: dirName, Clusters: tables,
+	}
+	return nil
 }

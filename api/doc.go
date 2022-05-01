@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gofiber/fiber/v2"
 	"kiviDB/core"
+	"log"
 	"net/http"
 )
 
@@ -24,32 +25,37 @@ func GetDocumentHandler(context *fiber.Ctx) error {
 	)
 	id, err = ParseArg(context, "id")
 	if err != nil {
-		return nil
+		log.Printf("[GET Document] %v\n", err)
+		return context.Status(http.StatusBadRequest).JSON(&fiber.Map{
+			"message": "unable to get id of the document",
+		})
 	}
 	cluster, err = ParseArg(context, "cluster")
 	if err != nil {
-		return nil
+		log.Printf("[GET Document] %v\n", err)
+		return context.Status(http.StatusBadRequest).JSON(&fiber.Map{
+			"message": "unable to get id of the cluster",
+		})
 	}
 	if err = core.DBCore.ClusterExists(cluster); err != nil {
-		context.Status(http.StatusNotFound).JSON(&fiber.Map{
+		log.Printf("[GET Document] unable to get document: %v\n", err)
+		return context.Status(http.StatusNotFound).JSON(&fiber.Map{
 			"message": "cluster not found",
 			"data":    []string{},
 		})
-		return err
 	}
 	document, err = core.DBCore.Get(cluster, id)
 	if err != nil {
-		context.Status(http.StatusNotFound).JSON(&fiber.Map{
+		log.Printf("[GET Document] unable to get document: %v\n", err)
+		return context.Status(http.StatusNotFound).JSON(&fiber.Map{
 			"message": "cluster not found",
 			"data":    []string{},
 		})
-		return err
 	}
-	context.Status(http.StatusOK).JSON(&fiber.Map{
+	return context.Status(http.StatusOK).JSON(&fiber.Map{
 		"message": "OK",
 		"value":   string(document),
 	})
-	return nil
 }
 
 func CreateDocumentHandler(context *fiber.Ctx) error {
@@ -60,33 +66,37 @@ func CreateDocumentHandler(context *fiber.Ctx) error {
 	)
 	cluster, err = ParseArg(context, "cluster")
 	if err != nil {
-		return nil
+		log.Printf("[POST Document] %v\n", err)
+		return context.Status(http.StatusBadRequest).JSON(&fiber.Map{
+			"message": "unable to get id of the cluster",
+		})
 	}
 	if err = core.DBCore.ClusterExists(cluster); err != nil {
-		context.Status(http.StatusNotFound).JSON(&fiber.Map{
+		log.Printf("[POST Document] unable to create document: %v\n", err)
+		return context.Status(http.StatusNotFound).JSON(&fiber.Map{
 			"message": "cluster not found",
-			"data":    []string{},
 		})
-		return err
 	}
 	model := docModel{}
 
 	err = context.BodyParser(&model)
 	if err != nil {
-		context.Status(http.StatusUnprocessableEntity).JSON(
-			&fiber.Map{"message": "request failed"})
-		return err
+		log.Printf("[POST Document] unable to create document: %v\n", err)
+		return context.Status(http.StatusNotFound).JSON(&fiber.Map{
+			"message": "unable to parse body",
+		})
 	}
 	generatedId, err = core.DBCore.Add(cluster, []byte(model.Value))
 	if err != nil {
-		context.Status(http.StatusInternalServerError).JSON(&fiber.Map{"message": ""})
-		return err
+		log.Printf("[POST Document] unable to create document: %v\n", err)
+		return context.Status(http.StatusNotFound).JSON(&fiber.Map{
+			"message": "unable to generate new document id",
+		})
 	}
-	context.Status(http.StatusOK).JSON(&fiber.Map{
-		"message": "new doc created",
+	return context.Status(http.StatusOK).JSON(&fiber.Map{
+		"message": "OK",
 		"key":     generatedId,
 	})
-	return nil
 }
 
 func PostDocumentHandler(context *fiber.Ctx) error {
@@ -97,35 +107,43 @@ func PostDocumentHandler(context *fiber.Ctx) error {
 	)
 	cluster, err = ParseArg(context, "cluster")
 	if err != nil {
-		return nil
+		log.Printf("[POST Document] %v\n", err)
+		return context.Status(http.StatusBadRequest).JSON(&fiber.Map{
+			"message": "unable to get id of the cluster",
+		})
 	}
 	if err = core.DBCore.ClusterExists(cluster); err != nil {
-		context.Status(http.StatusNotFound).JSON(&fiber.Map{
+		log.Printf("[POST Document] unable to create document: %v\n", err)
+		return context.Status(http.StatusNotFound).JSON(&fiber.Map{
 			"message": "cluster not found",
-			"data":    []string{},
 		})
-		return err
 	}
-	id = context.Params("id")
+	id, err = ParseArg(context, "id")
+	if err != nil {
+		log.Printf("[POST Document] %v\n", err)
+		return context.Status(http.StatusBadRequest).JSON(&fiber.Map{
+			"message": "unable to get id of the document",
+		})
+	}
 	model := docModel{}
 
 	err = context.BodyParser(&model)
 	if err != nil {
-		context.Status(http.StatusUnprocessableEntity).JSON(
-			&fiber.Map{"message": "request failed"})
-		return err
+		log.Printf("unable to parse body: %v\n", err)
+		return context.Status(http.StatusUnprocessableEntity).JSON(
+			&fiber.Map{"message": "request failure"})
 	}
 	err = core.DBCore.Set(cluster, id, []byte(model.Value))
 	if err != nil {
-		context.Status(http.StatusNotFound).JSON(&fiber.Map{
-			"message": "Error",
+		log.Printf("unable to create document: %v\n", err)
+		return context.Status(http.StatusNotFound).JSON(&fiber.Map{
+			"message": "unable to set value for document",
 		})
-		return err
 	}
-	context.Status(http.StatusOK).JSON(&fiber.Map{
+	return context.Status(http.StatusOK).JSON(&fiber.Map{
 		"message": "OK",
+		"key":     id,
 	})
-	return nil
 }
 
 func DeleteDocumentHandler(context *fiber.Ctx) error {
@@ -136,21 +154,26 @@ func DeleteDocumentHandler(context *fiber.Ctx) error {
 	)
 	id, err = ParseArg(context, "id")
 	if err != nil {
-		return nil
+		log.Printf("[DELETE Document] %v\n", err)
+		return context.Status(http.StatusBadRequest).JSON(&fiber.Map{
+			"message": "unable to get id of the document",
+		})
 	}
 	cluster, err = ParseArg(context, "cluster")
 	if err != nil {
-		return nil
+		log.Printf("[DELETE Document] %v\n", err)
+		return context.Status(http.StatusBadRequest).JSON(&fiber.Map{
+			"message": "unable to get id of the cluster",
+		})
 	}
 	err = core.DBCore.Delete(cluster, id)
 	if err != nil {
-		context.Status(http.StatusBadRequest).JSON(&fiber.Map{
-			"message": err,
+		log.Printf("[DELETE Document] unable to delete document: %v\n", err)
+		return context.Status(http.StatusBadRequest).JSON(&fiber.Map{
+			"message": "unable to delete document",
 		})
-		return err
 	}
-	context.Status(http.StatusOK).JSON(&fiber.Map{
+	return context.Status(http.StatusOK).JSON(&fiber.Map{
 		"message": "OK",
 	})
-	return nil
 }

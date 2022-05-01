@@ -6,13 +6,6 @@ import (
 	"regexp"
 )
 
-func (core *Core) GetAll(cluster string) ([]Object, error) {
-	if err := core.ClusterExists(cluster); err != nil {
-		return []Object{}, err
-	}
-	return core.ClusterValues(cluster)
-}
-
 func (core *Core) Filter(cluster string, query string) ([]string, error) {
 	var (
 		err      error
@@ -50,15 +43,16 @@ func (core *Core) DeleteByRegex(cluster string, query string) error {
 		return err
 	}
 	result, err = core.ClusterValues(cluster)
-	_, er := regexp.Compile(query)
-	if er != nil {
-		log.Println("Error in regex")
-		return er
+	_, err = regexp.Compile(query)
+	if err != nil {
+		log.Println("error in regex")
+		return err
 	}
 	for _, value := range result {
 		if matched, _ := regexp.MatchString(query, value.Value); matched {
 			if err = core.Delete(cluster, value.Key); err != nil {
-				log.Panicf("Cant delete document, %v", err)
+				log.Printf("cannot delete document: %v", err)
+				return err
 			}
 		}
 	}

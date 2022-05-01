@@ -8,6 +8,7 @@ import (
 	"kiviDB/core"
 	"log"
 	"os"
+	"time"
 )
 
 func main() {
@@ -17,19 +18,20 @@ func main() {
 	}
 	dirName := os.Getenv("DIR_NAME")
 	if dirName == "" {
-		dirName = "DEFAULT"
+		dirName = "KiViDataBase"
 	}
-	address := os.Getenv("ADDRESS")
+	port := os.Getenv("PORT")
 	host := os.Getenv("HOST")
-	logFileName := os.Getenv("LOG_FILE")
 	if startError := core.Init(dirName); startError != nil {
 		_ = os.MkdirAll(dirName, os.ModePerm)
 		if startError = core.Init(dirName); startError != nil {
-			log.Fatal("Error: directory doesnt exists")
+			log.Fatal("Error: directory doesn't exists")
 		}
 	}
-	path := logFileName
-	_ = os.Remove(path)
+	logFileName := "logs/" + time.Now().Format("01-02-2006 15-04-05 Mon") + ".log"
+	if _, err := os.Stat("./logs"); os.IsNotExist(err) {
+		_ = os.MkdirAll("./logs", os.ModePerm)
+	}
 	f, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("Unable to open log file: %v", err)
@@ -55,6 +57,9 @@ func main() {
 	app.Post("/doc/:cluster", api.CreateDocumentHandler)
 	app.Delete("/doc/:cluster/:id", api.DeleteDocumentHandler)
 
-	log.Fatal(app.Listen(host + ":" + address))
+	log.Println("Starting...")
+	log.Printf("Listening %v:%v\n", host, port)
+	err = app.Listen(host + ":" + port)
+	log.Fatal(err)
 
 }
