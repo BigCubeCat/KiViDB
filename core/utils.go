@@ -2,6 +2,7 @@ package core
 
 import (
 	"errors"
+	"fmt"
 	"github.com/google/uuid"
 	"io/ioutil"
 	"log"
@@ -10,16 +11,15 @@ import (
 )
 
 type Object struct {
-	Key   string
-	Value string
+	Key   string `json:"key"`
+	Value string `json:"value"`
 }
 
-func FolderExists(path string) (bool, error) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true, nil
+func FolderExists(path string) error {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return err
 	}
-	return false, err
+	return nil
 }
 
 func GetTables(path string) ([]string, error) {
@@ -28,7 +28,6 @@ func GetTables(path string) ([]string, error) {
 	if err != nil {
 		return names, err
 	}
-
 	for _, f := range files {
 		names = append(names, f.Name())
 	}
@@ -41,15 +40,15 @@ func GenerateID() string {
 }
 
 func (core *Core) ClusterExists(cluster string) error {
-	if _, err := os.Stat(path.Join(core.DirName, cluster)); os.IsNotExist(err) {
-		return errors.New("cluster doesnt exists")
+	if err := FolderExists(path.Join(core.DirName, cluster)); err != nil {
+		return errors.New(fmt.Sprintf("cluster [%v] doesn't exists", cluster))
 	}
 	return nil
 }
 
 func (core *Core) IdExists(id string) error {
 	if _, err := os.Stat(id); errors.Is(err, os.ErrNotExist) {
-		return err
+		return errors.New(fmt.Sprintf("document [%v] doesn't exists", id))
 	}
 	return nil
 }
@@ -57,17 +56,16 @@ func (core *Core) IdExists(id string) error {
 func (core *Core) ClusterDocuments(cluster string) ([]string, error) {
 	var (
 		result []string
-		err    error
 	)
-	if err = core.ClusterExists(cluster); err != nil {
+	if err := core.ClusterExists(cluster); err != nil {
 		return result, err
 	}
-	file, e := ioutil.ReadDir(path.Join(core.DirName, cluster))
-	if e != nil {
-		return result, e
+	files, err := ioutil.ReadDir(path.Join(core.DirName, cluster))
+	if err != nil {
+		return result, err
 	}
-	for _, f := range file {
-		result = append(result, f.Name())
+	for _, file := range files {
+		result = append(result, file.Name())
 	}
 	return result, nil
 }
@@ -75,22 +73,21 @@ func (core *Core) ClusterDocuments(cluster string) ([]string, error) {
 func (core *Core) ClusterValues(cluster string) ([]Object, error) {
 	var (
 		result []Object
-		err    error
 	)
-	if err = core.ClusterExists(cluster); err != nil {
+	if err := core.ClusterExists(cluster); err != nil {
 		return result, err
 	}
-	file, e := ioutil.ReadDir(path.Join(core.DirName, cluster))
-	if e != nil {
-		return result, e
+	files, err := ioutil.ReadDir(path.Join(core.DirName, cluster))
+	if err != nil {
+		return result, err
 	}
-	var dat []byte
-	for _, f := range file {
-		dat, err = core.DocumentData(cluster, f.Name())
+	var data []byte
+	for _, file := range files {
+		data, err = core.DocumentData(cluster, file.Name())
 		if err != nil {
-			log.Panicf("Error in get cluster values: %v", err)
+			log.Panicf("unable to get cluster values: %v", err)
 		}
-		result = append(result, Object{f.Name(), string(dat)})
+		result = append(result, Object{file.Name(), string(data)})
 	}
 	return result, nil
 }

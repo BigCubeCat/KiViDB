@@ -10,35 +10,31 @@ import (
 const ClusterRegex = "[a-z0-9_]"
 
 func (core *Core) CreateCluster(cluster string) error {
-	var (
-		err error
-	)
-	if err = core.ClusterExists(cluster); err == nil {
-		return errors.New("cluster already exists")
+	if err := core.ClusterExists(cluster); err == nil {
+		return errors.New("cluster with this name already exists")
 	}
 	if match, _ := regexp.MatchString(ClusterRegex, cluster); !match {
-		return errors.New("cluster name must contain only lowercase and numbers")
+		return errors.New("cluster name must contain only lowercase letters and numbers")
 	}
 	core.Clusters = append(core.Clusters, cluster)
-	return os.MkdirAll(path.Join(core.DirName, cluster), os.ModePerm)
+	if err := os.MkdirAll(path.Join(core.DirName, cluster), os.ModePerm); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (core *Core) DropCluster(cluster string) error {
-	var (
-		err error
-	)
-	if err = core.ClusterExists(cluster); err != nil {
-		return errors.New("cluster already exists")
-	}
+	// Removing cluster from clusters slice
 	var remove = func(slice []string, deleteValue string) []string {
 		var newClusters []string
-		for _, clstr := range slice {
-			if deleteValue != clstr {
-				newClusters = append(newClusters, clstr)
+		for _, cluster := range slice {
+			if deleteValue != cluster {
+				newClusters = append(newClusters, cluster)
 			}
 		}
 		return newClusters
 	}
 	core.Clusters = remove(core.Clusters, cluster)
-	return os.RemoveAll(path.Join(core.DirName, cluster))
+	err := os.RemoveAll(path.Join(core.DirName, cluster))
+	return err
 }
