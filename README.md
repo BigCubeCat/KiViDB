@@ -9,7 +9,6 @@ go build .
 ```env
 DIR_NAME=YOUR_DB_NAME
 ADDRESS=8080
-LOG_FILE=kividb.log
 HOST=localhost
 ```
 3. Run ```./kiviDB```
