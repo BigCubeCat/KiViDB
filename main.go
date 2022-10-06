@@ -1,15 +1,27 @@
 package main
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/joho/godotenv"
+	"fmt"
 	"kiviDB/api"
 	"kiviDB/core"
 	"log"
+	"net/http"
 	"os"
 	"time"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
 )
+
+func runFTPServer(directory string, port string) {
+	// TODO: setup routing for many ftp servers
+	fmt.Println("here");
+	http.Handle("/", http.FileServer(http.Dir(directory)))
+
+	log.Printf("Serving %s on HTTP port: %s\n", directory, port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
 
 func main() {
 	err := godotenv.Load()
@@ -22,6 +34,9 @@ func main() {
 	}
 	port := os.Getenv("PORT")
 	host := os.Getenv("HOST")
+
+	ftpPort := os.Getenv("FTP_PORT")
+	ftpDir := os.Getenv("FTP_DIR")
 
 	logFileName := "logs/" + time.Now().Format("01-02-2006 15-04-05") + ".log"
 	if _, err = os.Stat("./logs"); os.IsNotExist(err) {
@@ -65,6 +80,10 @@ func main() {
 
 	log.Println("Starting...")
 	log.Printf("Listening %v:%v\n", host, port)
+
+	// calling ftp server MUST BE before run main server
+	go runFTPServer(ftpDir, ftpPort)
+
 	err = app.Listen(host + ":" + port)
 	log.Fatal(err)
 
