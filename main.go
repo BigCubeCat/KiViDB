@@ -1,22 +1,20 @@
 package main
 
 import (
-	"fmt"
-	"kiviDB/api"
-	"kiviDB/core"
-	"log"
-	"net/http"
-	"os"
-	"time"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
+	"kiviDB/api"
+	"kiviDB/core"
+	"kiviDB/logger"
+	"log"
+	"net/http"
+	"os"
 )
 
 func runFTPServer(directory string, port string) {
 	// TODO: setup routing for many ftp servers
-	fmt.Println("here");
+	// fmt.Println("here");
 	http.Handle("/", http.FileServer(http.Dir(directory)))
 
 	log.Printf("Serving %s on HTTP port: %s\n", directory, port)
@@ -28,32 +26,20 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+	// getting database folder name
 	dirName := os.Getenv("DIR_NAME")
 	if dirName == "" {
 		dirName = "KiViDataBase"
 	}
+	// http server vars
 	port := os.Getenv("PORT")
 	host := os.Getenv("HOST")
-
+	// ftp server vars
 	ftpPort := os.Getenv("FTP_PORT")
 	ftpDir := os.Getenv("FTP_DIR")
 
-	logFileName := "logs/" + time.Now().Format("01-02-2006 15-04-05") + ".log"
-	if _, err = os.Stat("./logs"); os.IsNotExist(err) {
-		_ = os.MkdirAll("./logs", os.ModePerm)
-	}
-	var f *os.File
-	f, err = os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("Unable to open log file: %v", err)
-	}
-	defer func(f *os.File) {
-		err = f.Close()
-		if err != nil {
-			log.Panicf("Unable to close log file: %v", err)
-		}
-	}(f)
-	log.SetOutput(f)
+	logger.Init()        // setting up logger
+	defer logger.Close() // defer closing log file
 
 	if startError := core.Init(dirName); startError != nil {
 		log.Printf("Creating database folder with name: %v\n", dirName)
